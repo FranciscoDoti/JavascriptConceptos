@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Ejemplo de JavaScript</title>
+  <meta charset="UTF-8">
+</head>
+
+<body onLoad="activarPrimerControl()">
+  <!-- Evento onLoad -->
+
+  <form method="post" action="procesar.php" id="formulario1">
+    Ingrese nombre:
+    <input type="text" id="usuario" name="usuario" size="20">
+    <br>
+    Ingrese clave:
+    <input type="password" id="clave" name="clave" size="20">
+    <br>
+    <input type="submit" id="confirmar" name="confirmar" value="Confirmar">
+  </form>
+
+
+  <script> // CLASE Y HERENCIA. VER METODO SUPER
+
+      class Persona {
+        constructor(nombre, edad) {
+          this.nombre = nombre;
+          this.edad = edad;
+        }
+    
+        imprimir() {
+          document.write(`Nombre: ${this.nombre}<br>`);
+          document.write(`Edad: ${this.edad}<br>`);
+        }    
+      }
+    
+      class Empleado extends Persona {
+        constructor(nombre, edad, sueldo) {
+          super(nombre, edad);
+          this.sueldo = sueldo;
+        }
+    
+        imprimir() {
+          super.imprimir();
+          document.write(`Sueldo: ${this.sueldo}<br>`);      
+        }
+    
+        pagaImpuestos() {
+          if (this.sueldo>5000)
+            document.write(`${this.nombre} debe pagar impuestos<br>`);
+          else
+            document.write(`${this.nombre} no debe pagar impuestos<br>`);      
+        }
+      }
+    
+    
+      const persona1=new Persona('Juan', 44);
+      persona1.imprimir();
+      document.write('<hr>');
+    
+      const empleado1=new Empleado('Juan', 44, 7000);
+      empleado1.imprimir();
+      empleado1.pagaImpuestos();
+    
+    </script>
+    
+
+  <script> // A LA INVERSA DE LOS PARAMETROS REST. LOS OPERADORES SPREAD PERMITEN DESCOMPONER EL
+        // VECTOR EN OTRAS VARIABLES
+
+      function sumar(x,y,z) {
+        return x+y+z;
+      }
+    
+      const vec=[10,20,30];
+      const s=sumar(...vec); // SE LE PONEN "..." EN LA LLAMADA A LA FUNCION Y ARRIBA SE DESCOMPONE EN
+      // TANTAS VARIABLES COMO ELEMENTOS TENGA EL VECTOR.
+      document.write(s);
+    
+    </script>
+
+  <script> // FUNCION CON PARAMETROS REST
+
+      function sumar(...valores) { //... valores. Quiere decri que es un param rest. le podemos pasar 
+                                  // cualquier array y lo va a tomar
+        let suma=0;
+        for(let x=0;x<valores.length;x++)
+          suma+=valores[x];
+        return suma;
+      }
+    
+      document.write(sumar(10, 2, 44, 3));
+      document.write('<br>');
+      document.write(sumar(1, 2));
+      document.write('<br>');
+      document.write(sumar());
+      document.write('<br>');
+    
+    </script>
+  // CREANDO Expresiones regulares y testeandolas
+      var valor=prompt('Ingrese un numero entero positivo de 3 dígitos','');
+      var patron=new RegExp('^[0-9]{3}$');
+      if (patron.test(valor))
+        alert('Se ingresó un valor entero positivo de 3 dígitos');
+      else
+        alert('No se ingresó un valor entero positivo de 3 dígitos');
+    </script>
+      
+
+  <script>
+  //USANDO EL ? EN LUGAR DE IF
+    var num1=1, num2=2;
+
+    num1>num2 ? document.write(`${num1} es mas grande que ${num2}`) : 
+        document.write(`${num2} es mas grande que ${num1}`);
+
+  </script>
+  <script> // COMO MANEJAR EVENTOS EN LA PAGINA USANDO addEventListener y preventDefault
+    window.addEventListener('load', inicio, false);
+
+    function inicio() {
+      document.getElementById("formulario1").addEventListener('submit', validar, false);
+    }
+
+    function validar(evt) {
+      var usu = document.getElementById("usuario").value;
+      var cla = document.getElementById("clave").value;
+      if (usu.length == 0 || cla.length == 0) {
+        alert('El nombre de usuario o clave está vacío');
+        evt.preventDefault(); //HACE QUE NO SE ENVIEN LOS DATOS AL SERVIDOR
+      }
+    }
+  </script>
+
+  <script>
+    // asignando una funcion a una variable
+    var f1 = function (x, y) {
+      var s = x + y;
+      return s;
+    }
+
+    document.write(f1(4, 6) + '<br>');
+    var f2 = f1;
+    document.write(f2(3, 3) + '<br>'); 
+  </script>
+
+
+  <script>
+    //FUNCION DENTRO DE OTRA FUNCION
+
+    function saludar() {
+      var msj;
+
+      function crearMsj() {
+        var mensaje = '';
+        var separador = " ; ";
+        for (var i in arguments) {
+          mensaje = mensaje + arguments[i] + separador;
+        }
+        return mensaje;
+      };
+
+      msj = crearMsj('Hola', 'Como', 'Andas');
+      document.write(msj);
+    };
+
+    saludar();
+
+  </script>
+
+
+  <script>
+    function sumarUsandoArguments() {
+      'use strict'; // ESTA DIRECTIVA NOS INDICA QUE HAY QUE DECLARAR BIEN TODAS LAS VARIABLES SINO
+      // VA A TIRAR ERROR. SIRVE PARA SEPARAR BIEN ENTRE VAR GLOBABLES Y LOCALES.
+
+      var suma = 0;
+
+      for (var i in arguments) {
+        suma = suma + arguments[i];
+      }
+      return suma;
+    };
+
+    document.write('La suma de 10, 20, 30, 40, 50 y 60 es ' + sumarUsandoArguments(10, 20, 30, 40, 50, 60));
+    document.write('La suma de 1, 2 y 3 da...' + sumarUsandoArguments(1, 2, 3));
+
+  </script>
+
+  <script src="cliente.js"></script>
+  <script>
+    // CREANDO UN OBJETO LITERAL
+    var cliente1 = {
+      nombre: 'Juan',
+      deposito: 0,
+      imprimir () { //OTRA FORMA DE DEFINIR UNA FUNCION
+        document.write(this.nombre + '<br>');
+        document.write(this.deposito + '<br>');
+      },
+      depositar: function (monto) {
+        this.deposito = this.deposito + monto;
+      },
+      extraer: function (monto) {
+        this.deposito = this.deposito - monto;
+      }
+    }; // FIN CREACION OBJETO LITERAL
+
+    cliente1.imprimir();
+
+    var vectorPrueba = [];
+    vectorPrueba.push(10);
+    vectorPrueba.push(20, 30);
+
+    var cliente2 = new Cliente('Juancito', 1000);
+    cliente2.extraer(200);
+    document.write("el nombre del cliente es... " + cliente2.nombre);
+    document.write(" y su saldo es " + cliente2.saldo);
+  </script>
+
+
+  <script src="funciones.js"></script>
+  <!--Como agarrar scripts de archivos externos-->
+  <script>
+    document.write('La fecha de hoy es:' + retornarFecha());//notar que esta funcion proviene de funciones.js
+    document.write('<br>');
+    document.write('La hora es:' + retornarHora());
+  </script>
+
+  <script>
+    var answer = window.confirm('Usted es un boludo?'); // WINDOW.confirm
+    if (answer) {
+      document.write('eligio aceptar');  //MANEJANDO LA CONFIRMACION DE LA ALERT
+    } else {
+      document.write('eligio cancelar');
+    }
+    var ventana = open('http://www.google.com.ar', 'EL GUGEL WACHIN', 'scrollbars=yes, width=200, resizable=no'); //USANDO EL OBJETO WINDOW
+
+    ventana.document.getElementsByName('q')[0].value = 'Hola';
+    ventana.location = 'http://www.lanacion.com.ar';
+    ventana.history.back();
+    ventana.screen.width(1000);
+
+
+
+    ventana.scrollY(12300);
+  </script>
+
+  <script>
+    function activarPrimerControl() {
+      document.getElementById('nombre').focus(); //  funcion focus aplicada a un webElement 
+    }
+  </script>
+
+  <script>
+    function pintar(col) {
+      document.getElementById('cuadrado1').style.backgroundColor = col;
+    }
+  </script>
+
+  <a href="#" onMouseOver="pintar('#f00')" onMouseOut="pintar('#000')">Rojo</a> -
+  <!-- Evento onMouseOver y onMouseOut -->
+  <a href="#" onMouseOver="pintar('#0f0')" onMouseOut="pintar('#000')">Verde</a> -
+  <a href="#" onMouseOver="pintar('#00f')" onMouseOut="pintar('#000')">Azul</a>
+  <div id="cuadrado1" style="background:#000;width:200px;height:200px"></div>
+
+  <script>
+    function vaciar(control) {
+      control.value = '';
+    }
+    function verificarEntrada(control) {
+      if (control.value == '')
+        alert('Debe ingresar datos');
+    }
+  </script>
+
+  <form>
+    <input type="text" id="nombre" onFocus="vaciar(this)" onBlur="verificarEntrada(this)" value="nombre"><br>
+    <!-- IMPORTANTE! el uso del this -->
+    <input type="text" id="edad" onFocus="vaciar(this)" onBlur="verificarEntrada(this)" value="mail">
+    <!-- el this sería la direccion del objeto que llama al evento-->
+    <br>
+    <input type="button" value="Confirmar">
+  </form>
+
+
+  <form>
+    <input type="button" id='nombre' onclick="mostrarSueldos(sueldos)" value="Mostrar Sueldos">
+  </form>
+
+  <script>
+    var nombre = prompt('Ingrese su nombre', 'nombre'); //Como leer cosas por teclado y asignarlos a una variable
+    var edad = prompt('Ingrese su edad', 'Edad');
+    function armarMensaje(nombre, edad) {
+      return `Mi nombre es ${nombre} y mi edad ${edad}`;
+    };
+
+    var fecha = new Date();
+    document.write(`La fecha actual es ${fecha.getDate()}`);
+
+    function cargarVectorSueldos(sueldos) {
+      var i;
+      for (i = 1; i < sueldos.length; i++) {
+        sueldos[i] = prompt(`Ingrese sueldo de empleado nro ${i}`);
+      };
+    };
+    function mostrarSueldos(sueldos) {
+      var i;
+      for (i = 1; i < sueldos.length; i++) {
+        ('<br>');
+        alert(`El sueldo del empleado ${i} es ${sueldos[i]}`);
+      }
+    }
+
+    document.write(`<br> El numero Pi es igual a ${Math.PI} <br>`); //Uso de la clase Math
+
+    var cadena = '    Hola   ';
+    cadena = cadena.trim(); // Uso de los metodos de la clase String
+    document.write('cadena = ' + cadena);
+
+
+    var sueldos = new Array(5); // creando un array en Javascript
+    cargarVectorSueldos(sueldos);
+    var msj = armarMensaje(nombre, edad);
+
+    var nom = document.getElementById('nombre').value; // obteniendo un atributo del element. tambien funca 
+    //para los atributos que no se ven en el html
+    document.write(nom);
+  </script>
+
+</body>
+
+</html>
